@@ -34,13 +34,13 @@ test('AdRecord returns searched data from database.', async ()=>{
     expect((ads[0]as AdEntity).lat).toBeDefined();
 });
 
-test('AdRecord returns empty array from database for not matching data.', async ()=>{
+test('AdRecord.findAll returns empty array from database for not matching data.', async ()=>{
     const ads = await AdRecord.findAll('xxx');
 
     expect(ads).toStrictEqual([])
 });
 
-test('AdRecord returns id when addind to database.', async ()=>{
+test('AdRecord.findAll returns id when adding to database.', async ()=>{
     const ad = new AdRecord({
         name: 'test',
         description: 'test',
