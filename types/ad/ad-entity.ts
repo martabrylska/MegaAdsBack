@@ -8,7 +8,9 @@ export interface AdEntity extends SimpleAdEntity {
     name: string;
     description: string;
     price: number;
-    url: string;
+    url1: string;
+    url2: string;
+    url3: string;
 }
 
 export interface NewAdEntity extends Omit<AdEntity, 'id'> {

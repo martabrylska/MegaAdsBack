@@ -3,7 +3,9 @@ import {AdRecord} from "../records/ad.record";
 const defaultObj = {
     name: 'Test Name',
     description: 'blah',
-    url: 'https://megak.pl',
+    url1: 'https://megak.pl',
+    url2: '',
+    url3: '',
     price: 0,
     lat: 9,
     lon: 9,
