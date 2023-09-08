@@ -5,7 +5,6 @@ export const adRouter = Router()
 
     .get('/search/:name?', async (req, res) => {
         const ads = await AdRecord.findAll(req.params.name ?? '')
-
         res.json(ads);
     })
 
@@ -18,4 +17,10 @@ export const adRouter = Router()
         const ad = new AdRecord(req.body);
         await ad.insert();
         res.json(ad);
+    })
+
+    .patch('/:id', async (req, res) => {
+        const ad = await AdRecord.getOne(req.params.id);
+        console.log(ad);
+        res.json(await ad.update());
     })

@@ -46,10 +46,11 @@ test('AdRecord.findAll returns id when adding to database.', async ()=>{
         description: 'test',
         price: 0,
         url1: 'test.pl',
-        url2: null,
-        url3: null,
+        url2: '',
+        url3: '',
         lat: 3,
         lon: 4,
+        views: 0,
     });
 
     await ad.insert();
