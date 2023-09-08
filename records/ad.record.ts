@@ -11,9 +11,12 @@ export class AdRecord implements AdEntity {
     public name: string;
     public description: string;
     public price: number;
-    public url: string;
+    public url1: string;
+    public url2: string;
+    public url3: string;
     public lat: number;
     public lon: number;
+    public views: number;
 
     constructor(obj: NewAdEntity) {
         if (!obj.name || obj.name.length > 100 ) {
@@ -28,7 +31,15 @@ export class AdRecord implements AdEntity {
             throw new ValidationError('Cena nie może być mniejsza od 0 ani większa niż 9 999 999zl')
         }
 
-        if (!obj.url || obj.url.length > 100 ) {
+        [obj.url2, obj.url3].map(url => {
+            if (url) {
+                if (url.length > 100 ) {
+                    throw new ValidationError('Link do ogłoszenia nie może przekraczać 100 znaków')
+                }
+            }
+        })
+
+        if (!obj.url1 || obj.url1.length > 100) {
             throw new ValidationError('Link do ogłoszenia nie może być pusty ani przekraczać 100 znaków')
         }
 
@@ -40,10 +51,12 @@ export class AdRecord implements AdEntity {
         this.name = obj.name;
         this.description = obj.description;
         this.price = obj.price;
-        this.url = obj.url;
+        this.url1 = obj.url1;
+        this.url2 = obj.url2;
+        this.url3 = obj.url3;
         this.lat = obj.lat;
         this.lon = obj.lon;
-
+        this.views = obj.views;
     }
 
     static async getOne(id: string): Promise<AdRecord | null> {
@@ -70,16 +83,30 @@ export class AdRecord implements AdEntity {
             this.id = uuid();
         }
 
-        await pool.execute("INSERT INTO `ads`(`id`, `name`, `description`, `price`, `url`, `lat`, `lon`) VALUES(:id, :name, :description, :price, :url, :lat, :lon)", {
+        await pool.execute("INSERT INTO `ads`(`id`, `name`, `description`, `price`, `url1`, `url2`, `url3`, `lat`, `lon`, `views`) VALUES(:id, :name, :description, :price, :url1, :url2, :url3, :lat, :lon, :views)", {
             id: this.id,
             name: this.name,
             description: this.description,
             price: this.price,
-            url: this.url,
+            url1: this.url1,
+            url2: this.url2,
+            url3: this.url3,
             lat: this.lat,
             lon: this.lon,
+            views: this.views,
         });
 
         return this.id;
+    }
+
+    async update(): Promise<number>{
+        this.views++;
+
+        await pool.execute("UPDATE `ads` SET `views` = :views WHERE `id` = :id", {
+            id: this.id,
+            views: this.views,
+        });
+
+        return this.views;
     }
 }
