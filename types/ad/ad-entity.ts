@@ -12,6 +12,7 @@ export interface AdEntity extends SimpleAdEntity {
     url2: string;
     url3: string;
     views: number;
+    accepted: boolean;
 }
 
 export interface NewAdEntity extends Omit<AdEntity, 'id'> {

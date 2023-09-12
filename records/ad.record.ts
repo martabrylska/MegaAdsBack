@@ -17,6 +17,7 @@ export class AdRecord implements AdEntity {
     public lat: number;
     public lon: number;
     public views: number;
+    public accepted: boolean;
 
     constructor(obj: NewAdEntity) {
         if (!obj.name || obj.name.length > 100 ) {
@@ -57,6 +58,7 @@ export class AdRecord implements AdEntity {
         this.lat = obj.lat;
         this.lon = obj.lon;
         this.views = obj.views;
+        this.accepted = obj.accepted;
     }
 
     static async getOne(id: string): Promise<AdRecord | null> {
@@ -68,7 +70,7 @@ export class AdRecord implements AdEntity {
     }
 
     static async findAll(name: string): Promise<SimpleAdEntity[]> {
-        const [results] = await pool.execute("SELECT * FROM `ads` WHERE `name` LIKE :search", {
+        const [results] = await pool.execute("SELECT * FROM `ads` WHERE `name` LIKE :search AND `accepted` = 1", {
             search: `%${name}%`,
         }) as AdRecordResults;
 
@@ -83,7 +85,7 @@ export class AdRecord implements AdEntity {
             this.id = uuid();
         }
 
-        await pool.execute("INSERT INTO `ads`(`id`, `name`, `description`, `price`, `url1`, `url2`, `url3`, `lat`, `lon`, `views`) VALUES(:id, :name, :description, :price, :url1, :url2, :url3, :lat, :lon, :views)", {
+        await pool.execute("INSERT INTO `ads`(`id`, `name`, `description`, `price`, `url1`, `url2`, `url3`, `lat`, `lon`, `views`, `accepted`) VALUES(:id, :name, :description, :price, :url1, :url2, :url3, :lat, :lon, :views, :accepted)", {
             id: this.id,
             name: this.name,
             description: this.description,
@@ -94,12 +96,13 @@ export class AdRecord implements AdEntity {
             lat: this.lat,
             lon: this.lon,
             views: this.views,
+            accepted: this.accepted,
         });
 
         return this.id;
     }
 
-    async update(): Promise<number>{
+    async updateViews(): Promise<number>{
         this.views++;
 
         await pool.execute("UPDATE `ads` SET `views` = :views WHERE `id` = :id", {
@@ -108,5 +111,15 @@ export class AdRecord implements AdEntity {
         });
 
         return this.views;
+    }
+
+    async updateAccepted(): Promise<boolean>{
+        this.accepted = true;
+        console.log(this.accepted);
+        await pool.execute("UPDATE `ads` SET `accepted` = 1 WHERE `id` = :id", {
+            id: this.id,
+        });
+
+        return this.accepted;
     }
 }

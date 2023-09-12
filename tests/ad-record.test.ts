@@ -10,6 +10,7 @@ const defaultObj = {
     lat: 9,
     lon: 9,
     views: 0,
+    accepted: false,
 }
 
 test('Can build AdRecord', () => {

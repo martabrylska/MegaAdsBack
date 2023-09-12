@@ -51,6 +51,7 @@ test('AdRecord.findAll returns id when adding to database.', async ()=>{
         lat: 3,
         lon: 4,
         views: 0,
+        accepted: true,
     });
 
     await ad.insert();
