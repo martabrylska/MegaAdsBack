@@ -115,7 +115,6 @@ export class AdRecord implements AdEntity {
 
     async updateAccepted(): Promise<boolean>{
         this.accepted = true;
-        console.log(this.accepted);
         await pool.execute("UPDATE `ads` SET `accepted` = 1 WHERE `id` = :id", {
             id: this.id,
         });
