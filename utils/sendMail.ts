@@ -1,13 +1,13 @@
 import nodemailer from "nodemailer";
 import {AdRecord} from "../records/ad.record";
-
+import {mailConfig} from "../config/mail-config";
 
 export const sendMailToAdmin = (ad: AdRecord) => {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: mailConfig.service,
         auth: {
-            user: 'tomica.marta@gmail.com',
-            pass: 'wtkaqzlxdcznzzei'
+            user: mailConfig.user,
+            pass: mailConfig.pass,
         }
     });
 
